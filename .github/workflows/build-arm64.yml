@@ -1,0 +1,51 @@
+name: Build Lyricade (linux/arm64)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build Lyricade aarch64
+    runs-on: ubuntu-24.04-arm
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            pkg-config \
+            libglib2.0-dev \
+            libgtk-4-dev \
+            libadwaita-1-dev \
+            build-essential \
+            libasound2-dev \
+            pipewire-alsa \
+            libpipewire-0.3-dev \
+            libpulse-dev
+
+      - name: Setup Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust Cache
+        uses: swatinem/rust-cache@v2
+
+      - name: Build Binary
+        run: cargo build --release
+
+      - name: Verify architecture
+        run: |
+          file target/release/lyricade
+          test -x target/release/lyricade
+
+      - name: Upload Binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: lyricade-aarch64
+          path: target/release/lyricade
+          retention-days: 7
