@@ -183,8 +183,8 @@ impl Component for AppModel {
     #[name(header_bar)]
     &adw::HeaderBar {
       pack_start = &gtk::ToggleButton {
-        set_label: "Search",
-        set_tooltip_text: Some("Search"),
+        set_label: "搜索",
+        set_tooltip_text: Some("搜索"),
         set_icon_name: "edit-find-symbolic",
         #[watch]
         set_sensitive: !model.no_tracks,
@@ -200,12 +200,12 @@ impl Component for AppModel {
       pack_end = main_menu_button -> gtk::MenuButton {
         set_icon_name: "open-menu-symbolic",
         set_primary: true,
-        set_tooltip: "Main Menu",
+        set_tooltip: "主菜单",
       },
 
       pack_end = &gtk::ToggleButton {
         #[watch]
-        set_tooltip_text: if model.is_sidebar_pinned { Some("Unpin Track Details") } else { Some("Pin Track Details") },
+        set_tooltip_text: if model.is_sidebar_pinned { Some("取消固定轨道详情") } else { Some("固定轨道详情") },
         set_icon_name: "info-outline-symbolic",
         #[watch]
         set_sensitive: !model.no_tracks,
@@ -219,9 +219,9 @@ impl Component for AppModel {
 
       // Cancel button shown if lyrics fetching in progress
       pack_end = &gtk::Button {
-        set_label: "_Cancel",
+        set_label: "_取消",
         set_use_underline: true,
-        set_tooltip_text: Some("Cancel Get Lyrics"),
+        set_tooltip_text: Some("取消获取歌词"),
         set_margin_end: 12,
         #[watch]
         set_visible: model.is_fetching_lyrics,
@@ -233,9 +233,9 @@ impl Component for AppModel {
       #[local_ref]
       pack_end = get_lyrics_button -> adw::SplitButton {
         #[watch]
-        set_label: if model.get_lyrics_requires_confirmation { "_Get Lyrics…" } else { "_Get Lyrics" },
+        set_label: if model.get_lyrics_requires_confirmation { "_获取歌词…" } else { "_获取歌词" },
         set_use_underline: true,
-        set_tooltip_text: Some("Get Lyrics from lrclib.net"),
+        set_tooltip_text: Some("从 lrclib.net 获取歌词"),
         set_margin_end: 12,
         #[watch]
         set_visible: !model.is_fetching_lyrics,
@@ -265,7 +265,7 @@ impl Component for AppModel {
           #[local_ref]
           search_entry -> gtk::SearchEntry {
           set_hexpand: true,
-          set_placeholder_text: Some("Type to search"),
+          set_placeholder_text: Some("输入以搜索"),
 
           connect_search_changed[sender] => move |query| {
             sender.input(AppMsg::SearchQueryChanged(query.text().to_string()));
@@ -288,7 +288,7 @@ impl Component for AppModel {
             set_margin_bottom: 4,
 
             gtk::ToggleButton {
-              set_label: "no _lyrics",
+              set_label: "无_歌词",
               set_use_underline: true,
               set_hexpand: false,
               set_margin_end: 4,
@@ -303,7 +303,7 @@ impl Component for AppModel {
             },
 
             gtk::ToggleButton {
-              set_label: "no lyrics _tag",
+              set_label: "无歌词_标签",
               set_use_underline: true,
               set_hexpand: false,
               set_margin_end: 4,
@@ -318,7 +318,7 @@ impl Component for AppModel {
             },
 
             gtk::ToggleButton {
-              set_label: "l_rc file",
+              set_label: "l_rc 文件",
               set_use_underline: true,
               set_hexpand: false,
               set_margin_end: 4,
@@ -333,7 +333,7 @@ impl Component for AppModel {
             },
 
             gtk::ToggleButton {
-              set_label: "t_xt file",
+              set_label: "t_xt 文件",
               set_use_underline: true,
               set_hexpand: false,
               set_margin_end: 4,
@@ -348,7 +348,7 @@ impl Component for AppModel {
             },
 
             gtk::ToggleButton {
-              set_label: "not _sync",
+              set_label: "非_同步",
               set_use_underline: true,
               set_hexpand: false,
               set_margin_end: 4,
@@ -363,7 +363,7 @@ impl Component for AppModel {
             },
 
             gtk::ToggleButton {
-              set_label: "never _checked",
+              set_label: "从未_检查",
               set_use_underline: true,
               set_hexpand: false,
               set_margin_end: 4,
@@ -378,7 +378,7 @@ impl Component for AppModel {
             },
 
             gtk::ToggleButton {
-              set_label: "not _instrumental",
+              set_label: "非_纯音乐",
               set_use_underline: true,
               set_hexpand: false,
               set_margin_end: 4,
@@ -468,7 +468,7 @@ impl Component for AppModel {
                 gtk::Button {
                   set_halign: gtk::Align::Center,
                   set_valign: gtk::Align::Start,
-                  set_label: "Cancel",
+                  set_label: "取消",
                   #[watch]
                   set_visible: model.refresh_library_cancel_token.is_some() || model.manage_lyrics_cancel_token.is_some(),
 
@@ -494,13 +494,13 @@ impl Component for AppModel {
                     set_align: gtk::Align::Center,
 
                     adw::StatusPage {
-                      set_title: &format!("Welcome to {}", APP_NAME_PRETTY),
-                      set_description: Some("Add a Music Library to get started"),
+                      set_title: &format!("欢迎使用 {}", APP_NAME_PRETTY),
+                      set_description: Some("添加一个音乐库即可开始"),
                       set_icon_name: Some("lyricade-symbolic"),
                       set_width_request: 300,
                       #[wrap(Some)]
                       set_child = &gtk::Button {
-                        set_label: "_Add Music Library…",
+                        set_label: "_添加音乐库…",
                         set_use_underline: true,
                         set_css_classes: &["pill", "suggested-action"],
 
@@ -611,7 +611,7 @@ impl Component for AppModel {
                         gtk::MenuButton {
                           set_direction: gtk::ArrowType::Up,
                           set_css_classes: &["caption", "flat", "status-bar-button"],
-                          set_tooltip: "Show Statistics",
+                          set_tooltip: "显示统计",
                           set_use_underline: true,
                           #[watch]
                           set_label: &format!(
@@ -639,36 +639,36 @@ impl Component for AppModel {
                                 gtk::Label {
                                   set_align: gtk::Align::End,
                                   add_css_class: "heading",
-                                  set_tooltip: "Not Marked “Instrumental”",
-                                  set_label: "Non-Inst.:",
+                                  set_tooltip: "未标记为“纯音乐”",
+                                  set_label: "非纯音乐:",
                                 },
 
                                 gtk::Label {
                                   set_align: gtk::Align::End,
                                   add_css_class: "heading",
-                                  set_tooltip: "Have Lyrics Tag",
-                                  set_label: "Tagged:",
+                                  set_tooltip: "含歌词标签",
+                                  set_label: "有标签:",
                                 },
 
                                 gtk::Label {
                                   set_align: gtk::Align::End,
                                   add_css_class: "heading",
-                                  set_tooltip: "Have Lyrics Sidecar File",
-                                  set_label: "Sidecar:",
+                                  set_tooltip: "含歌词附带文件",
+                                  set_label: "附带:",
                                 },
 
                                 gtk::Label {
                                   set_align: gtk::Align::End,
                                   add_css_class: "heading",
-                                  set_tooltip: "Have Synchronous Lyrics",
-                                  set_label: "Sync:",
+                                  set_tooltip: "含同步歌词",
+                                  set_label: "同步:",
                                 },
 
                                 gtk::Label {
                                   set_align: gtk::Align::End,
                                   add_css_class: "heading",
-                                  set_tooltip: "Have Plain Lyrics",
-                                  set_label: "Plain:",
+                                  set_tooltip: "含纯文本歌词",
+                                  set_label: "纯文本:",
                                 },
                               },
 
@@ -677,10 +677,10 @@ impl Component for AppModel {
                                 set_orientation: gtk::Orientation::Vertical,
                                 set_spacing: 6,
 
-                                // "Non-Inst."
+                                // "非纯音乐:"
                                 gtk::Label {
                                   set_align: gtk::Align::Start,
-                                  set_tooltip: "Not Marked “Instrumental”",
+                                  set_tooltip: "未标记为“纯音乐”",
                                   #[watch]
                                   set_label: &format!(
                                     "{}/{} ({} %)",
@@ -693,7 +693,7 @@ impl Component for AppModel {
                                 // "Tagged"
                                 gtk::Label {
                                   set_align: gtk::Align::Start,
-                                  set_tooltip: "Have Lyrics Tag",
+                                  set_tooltip: "含歌词标签",
                                   #[watch]
                                   set_label: &format!(
                                     "{}/{} ({} %)",
@@ -706,7 +706,7 @@ impl Component for AppModel {
                                 // "Sidecar"
                                 gtk::Label {
                                   set_align: gtk::Align::Start,
-                                  set_tooltip: "Have Lyrics Sidecar File",
+                                  set_tooltip: "含歌词附带文件",
                                   #[watch]
                                   set_label: &format!(
                                     "{}/{} ({} %)",
@@ -716,10 +716,10 @@ impl Component for AppModel {
                                   ),
                                 },
 
-                                // "Sync"
+                                // "同步"
                                 gtk::Label {
                                   set_align: gtk::Align::Start,
-                                  set_tooltip: "Have Synchronous Lyrics",
+                                  set_tooltip: "含同步歌词",
                                   #[watch]
                                   set_label: &format!(
                                     "{}/{} ({} %)",
@@ -729,10 +729,10 @@ impl Component for AppModel {
                                   ),
                                 },
 
-                                // "Plain"
+                                // "纯文本"
                                 gtk::Label {
                                   set_align: gtk::Align::Start,
-                                  set_tooltip: "Have Plain Lyrics",
+                                  set_tooltip: "含纯文本歌词",
                                   #[watch]
                                   set_label: &format!(
                                     "{}/{} ({} %)",
@@ -794,7 +794,7 @@ impl Component for AppModel {
     let about_widget = AboutModel::builder().launch(()).detach();
 
     let dont_ask_again_check_button = gtk::CheckButton::default();
-    dont_ask_again_check_button.set_label(Some("_Don't ask again"));
+    dont_ask_again_check_button.set_label(Some("_不再询问"));
     dont_ask_again_check_button.set_use_underline(true);
     let dont_ask_again_widget = gtk::Box::default();
     dont_ask_again_widget.append(&dont_ask_again_check_button);
@@ -803,12 +803,12 @@ impl Component for AppModel {
     dont_ask_again_widget.set_align(gtk::Align::Center);
 
     let confirm_get_lyrics_alert_dialog = adw::AlertDialog::builder()
-      .heading("Are you sure?")
-      .body("Tags will be written to your files. This cannot be undone.")
+      .heading("确定吗？")
+      .body("歌词标签将写入你的文件，此操作无法撤销。")
       .default_response("cancel")
       .close_response("cancel")
       .build();
-    confirm_get_lyrics_alert_dialog.add_response("cancel", "Cancel");
+    confirm_get_lyrics_alert_dialog.add_response("cancel", "取消");
     confirm_get_lyrics_alert_dialog.add_response("confirm", "Confirm");
     confirm_get_lyrics_alert_dialog
       .set_response_appearance("confirm", adw::ResponseAppearance::Destructive);
@@ -1770,7 +1770,7 @@ impl Component for AppModel {
 
 impl AppModel {
   fn load_libraries(&mut self) -> Result<()> {
-    debug!("Loading Libraries and Tracks ...");
+    debug!("正在加载音乐库和轨道 ...");
 
     self.libraries = Library::get_all()?;
     self.load_tracks();
@@ -1840,7 +1840,7 @@ impl AppModel {
         btn.add_css_class("flat");
         btn.set_valign(gtk::Align::Center);
         btn.set_icon_name("document-text-symbolic");
-        btn.set_tooltip("View Lyrics");
+        btn.set_tooltip("查看歌词");
         let sender = self.sender.clone();
         btn.connect_clicked(move |_| {
           sender.input(AppMsg::ShowLyricsWindow(src));
@@ -1850,40 +1850,40 @@ impl AppModel {
 
       // General track info
       let pg = adw::PreferencesGroup::new();
-      pg.set_title("Track Details");
+      pg.set_title("轨道详情");
 
       let ar = adw::ActionRow::new();
       ar.set_use_markup(false);
-      ar.set_title("Artist Name");
+      ar.set_title("艺术家");
       ar.set_subtitle(&track.artist_name);
       pg.container_add(&ar);
 
       let ar = adw::ActionRow::new();
       ar.set_use_markup(false);
-      ar.set_title("Album Title");
+      ar.set_title("专辑名称");
       ar.set_subtitle(&track.album_name);
       pg.container_add(&ar);
 
       let ar = adw::ActionRow::new();
       ar.set_use_markup(false);
-      ar.set_title("Track Title");
+      ar.set_title("轨道标题");
       ar.set_subtitle(&track.track_name);
       pg.container_add(&ar);
 
       let ar = adw::ActionRow::new();
-      ar.set_title("Duration");
+      ar.set_title("时长");
       let duration = track.duration.round();
       ar.set_subtitle(&format!("{}:{:02}", duration as u32 / 60, duration as u32 % 60));
       pg.container_add(&ar);
 
       let ar = adw::ActionRow::new();
-      ar.set_title("File Date");
+      ar.set_title("文件日期");
       ar.set_subtitle(&util::ndt_utc_to_ui_string(track.file_modified_at));
       pg.container_add(&ar);
 
       let ar = adw::ActionRow::new();
       ar.set_use_markup(false);
-      ar.set_title("Path");
+      ar.set_title("路径");
       ar.set_subtitle(&track.path);
       pg.container_add(&ar);
 
@@ -1893,26 +1893,26 @@ impl AppModel {
       let inner = gtk::Box::new(gtk::Orientation::Vertical, 12);
 
       let pg = adw::PreferencesGroup::new();
-      pg.set_title("Lyrics");
+      pg.set_title("歌词");
 
       let ar = adw::ActionRow::new();
-      ar.set_title("Lyrics Tag");
+      ar.set_title("歌词标签");
       if track.lyrics.is_some() {
         let btn = view_lyrics_button(ViewLyricsSource::Tag);
         ar.add_suffix(&btn);
-        ar.set_subtitle("Present");
+        ar.set_subtitle("存在");
       } else {
-        ar.set_subtitle("Missing");
+        ar.set_subtitle("缺失");
       }
       pg.container_add(&ar);
 
       if track.lyrics.is_some() {
         let ar = adw::ActionRow::new();
-        ar.set_title("Type");
+        ar.set_title("类型");
         ar.set_subtitle(if track.lyrics_synchronised {
           "Synchronised"
         } else {
-          "Plain"
+          "纯文本"
         });
         pg.container_add(&ar);
       }
@@ -1923,8 +1923,8 @@ impl AppModel {
         let pg = adw::PreferencesGroup::new();
 
         let ar = adw::ActionRow::new();
-        ar.set_title("Sidecar File");
-        ar.set_subtitle("LRC format");
+        ar.set_title("附带文件");
+        ar.set_subtitle("LRC 格式");
 
         let btn = view_lyrics_button(ViewLyricsSource::Lrc);
         ar.add_suffix(&btn);
@@ -1937,8 +1937,8 @@ impl AppModel {
         let pg = adw::PreferencesGroup::new();
 
         let ar = adw::ActionRow::new();
-        ar.set_title("Sidecar File");
-        ar.set_subtitle("TXT format");
+        ar.set_title("附带文件");
+        ar.set_subtitle("TXT 格式");
 
         let btn = view_lyrics_button(ViewLyricsSource::Txt);
         ar.add_suffix(&btn);
@@ -1951,8 +1951,8 @@ impl AppModel {
         let pg = adw::PreferencesGroup::new();
 
         let ar = adw::ActionRow::new();
-        ar.set_title("Instrumental");
-        ar.set_subtitle("True");
+        ar.set_title("纯音乐");
+        ar.set_subtitle("是");
 
         pg.container_add(&ar);
         inner.append(&pg);
@@ -1961,7 +1961,7 @@ impl AppModel {
       let pg = adw::PreferencesGroup::new();
 
       let ar = adw::ActionRow::new();
-      ar.set_title("Last Check for Lyrics");
+      ar.set_title("上次检查歌词");
       ar.set_subtitle(
         &track
           .last_api_check_at
@@ -1976,30 +1976,30 @@ impl AppModel {
       // Extended debugging info
       if cfg!(debug_assertions) {
         let pg = adw::PreferencesGroup::new();
-        pg.set_title("Debug Information");
+        pg.set_title("调试信息");
 
         let ar = adw::ActionRow::new();
-        ar.set_title("Track Id");
+        ar.set_title("轨道 ID");
         ar.set_subtitle(&track.id.to_string());
         pg.container_add(&ar);
 
         let ar = adw::ActionRow::new();
-        ar.set_title("Library Id");
+        ar.set_title("音乐库 ID");
         ar.set_subtitle(&track.library_id.to_string());
         pg.container_add(&ar);
 
         let ar = adw::ActionRow::new();
-        ar.set_title("Added At");
+        ar.set_title("添加时间");
         ar.set_subtitle(&util::ndt_utc_to_ui_string(track.added_at));
         pg.container_add(&ar);
 
         let ar = adw::ActionRow::new();
-        ar.set_title("Updated At");
+        ar.set_title("更新时间");
         ar.set_subtitle(&util::ndt_utc_to_ui_string(track.updated_at));
         pg.container_add(&ar);
 
         let ar = adw::ActionRow::new();
-        ar.set_title("Refreshed At");
+        ar.set_title("刷新时间");
         ar.set_subtitle(&util::ndt_utc_to_ui_string(track.refreshed_at));
         pg.container_add(&ar);
 
@@ -2013,8 +2013,8 @@ impl AppModel {
 
       let status_page = adw::StatusPage::new();
       status_page
-        .set_title(&format!("{} tracks selected", selected.to_formatted_string(&*NUM_LOCALE)));
-      status_page.set_description(Some("Select one track to view details"));
+        .set_title(&format!("已选中 {} 个轨道", selected.to_formatted_string(&*NUM_LOCALE)));
+      status_page.set_description(Some("选择一个轨道以查看详情"));
       status_page.set_icon_name(Some("music-queue-symbolic"));
       status_page.add_css_class("compact");
 
@@ -2024,8 +2024,8 @@ impl AppModel {
       root.set_valign(gtk::Align::Center);
 
       let status_page = adw::StatusPage::new();
-      status_page.set_title("No track selected");
-      status_page.set_description(Some("Select a track to view details"));
+      status_page.set_title("未选择轨道");
+      status_page.set_description(Some("选择一个轨道以查看详情"));
       status_page.set_icon_name(Some("lyricade-symbolic"));
       status_page.add_css_class("compact");
 

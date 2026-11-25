@@ -64,7 +64,7 @@ impl FactoryComponent for LibraryRow {
       add_row = &adw::EntryRow {
         set_editable: true,
         set_use_markup: false,
-        set_title: "Name",
+        set_title: "名称",
         set_text: &self.library.name(),
 
         connect_changed[sender] => move |er| {
@@ -83,7 +83,7 @@ impl FactoryComponent for LibraryRow {
         set_valign: gtk::Align::Center,
         add_css_class: "property", // reverse title/subtitle styling
         set_use_markup: false,
-        set_title: "Library Path",
+        set_title: "音乐库路径",
         set_subtitle: &self.library.path,
 
         add_suffix = &gtk::Button {
@@ -91,7 +91,7 @@ impl FactoryComponent for LibraryRow {
           set_vexpand: false,
           set_icon_name: "folder-open-symbolic",
           add_css_class: "flat",
-          set_tooltip: "Browse",
+          set_tooltip: "浏览",
           connect_clicked => LibraryRowMsg::FileDialogRequest,
         },
       },
@@ -110,20 +110,20 @@ impl FactoryComponent for LibraryRow {
           #[name = "save_button"]
           gtk::Button {
             set_hexpand: true,
-            set_label: "Save",
+            set_label: "保存",
             set_sensitive: false,
             connect_clicked => LibraryRowMsg::Save,
           },
 
           gtk::Button {
             set_hexpand: true,
-            set_label: "Cancel",
+            set_label: "取消",
             connect_clicked => LibraryRowMsg::Cancel,
           },
 
           gtk::Button {
             set_hexpand: true,
-            set_label: "Delete Library",
+            set_label: "删除音乐库",
             add_css_class: "destructive-action",
             connect_clicked => LibraryRowMsg::Delete,
           },
@@ -172,7 +172,7 @@ impl FactoryComponent for LibraryRow {
           if !self.name_too_long {
             sender
               .output(LibraryRowOutput::ShowToast(
-                "Name too long (max. 60 characters)".into(),
+                "名称过长（最多 60 个字符）".into(),
                 true,
               ))
               .expect("LibraryRowOutput receiver dropped");

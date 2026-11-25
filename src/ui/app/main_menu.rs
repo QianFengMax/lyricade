@@ -94,28 +94,28 @@ impl SimpleComponent for MainMenuButtonModel {
     let sender_handle = sender.clone();
     let action_test_spinner: RelmAction<ActionTestSpinner> = RelmAction::new_stateless(move |_| {
       sender_handle
-        .output(AppMsg::ShowSpinner(("I'm spinning around…".into(), "Get out of my way".into())))
+        .output(AppMsg::ShowSpinner(("我正在旋转…".into(), "让开".into())))
         .expect("MainMenuButtonModel output receiver dropped");
     });
     menu_actions_group.add_action(action_test_spinner);
 
     // Main menu model
     let menu = gtk::gio::Menu::new();
-    menu.append(Some("_Refresh Libraries"), Some("main_menu.refresh_libraries"));
-    menu.append(Some("_Manage Lyrics…"), Some("main_menu.manage_lyrics"));
+    menu.append(Some("_刷新音乐库"), Some("main_menu.refresh_libraries"));
+    menu.append(Some("_管理歌词…"), Some("main_menu.manage_lyrics"));
 
     let menu_section = gtk::gio::Menu::new();
-    menu_section.append(Some("_Preferences"), Some("main_menu.prefs"));
-    menu_section.append(Some(&format!("_About {APP_NAME_PRETTY}")), Some("main_menu.about"));
+    menu_section.append(Some("_首选项"), Some("main_menu.prefs"));
+    menu_section.append(Some(&format!("_关于 {APP_NAME_PRETTY}")), Some("main_menu.about"));
     menu.append_section(None, &menu_section);
 
     // Add debug menu
     if cfg!(debug_assertions) {
       let debug_menu = gtk::gio::Menu::new();
-      debug_menu.append(Some("Test _Toast"), Some("main_menu.test_toast"));
-      debug_menu.append(Some("Test _Spinner"), Some("main_menu.test_spinner"));
+      debug_menu.append(Some("测试_提示"), Some("main_menu.test_toast"));
+      debug_menu.append(Some("测试_旋转动画"), Some("main_menu.test_spinner"));
       let debug_section = gtk::gio::Menu::new();
-      debug_section.append_submenu(Some("_Debug"), &debug_menu);
+      debug_section.append_submenu(Some("_调试"), &debug_menu);
       menu.append_section(None, &debug_section);
     }
 

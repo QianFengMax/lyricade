@@ -44,7 +44,7 @@ impl Component for ManageLyricsModel {
 
   view! {
     adw::Window {
-      set_title: Some("Manage Lyrics"),
+      set_title: Some("管理歌词"),
       set_default_width: 600,
 
       #[wrap(Some)]
@@ -54,21 +54,21 @@ impl Component for ManageLyricsModel {
         #[wrap(Some)]
         set_content = &adw::PreferencesPage {
           adw::PreferencesGroup {
-            set_title: "Lyrics Tags",
-            set_description: Some("What actions to take on lyrics tags embedded in your audio files."),
+            set_title: "歌词标签",
+            set_description: Some("对音频文件中嵌入的歌词标签执行的操作。"),
 
             gtk::ListBox {
               add_css_class: "boxed-list",
 
               adw::ComboRow {
-                set_title: "_Delete Lyrics Tags",
+                set_title: "_删除歌词标签",
                 set_use_underline: true,
-                set_subtitle: "Delete lyrics tags from audio files",
+                set_subtitle: "从音频文件删除歌词标签",
                 set_model: Some(&gtk::StringList::new(&[
-                  "Do Nothing",
-                  "Delete Plain",
-                  "Delete Sync",
-                  "Delete All",
+                  "不执行操作",
+                  "删除纯文本",
+                  "删除同步",
+                  "删除全部",
                 ])),
                 #[watch]
                 set_selected: model.state.tags.delete as u32,
@@ -80,15 +80,15 @@ impl Component for ManageLyricsModel {
               },
 
               adw::ComboRow {
-                set_title: "C_onditional Delete",
+                set_title: "_条件删除",
                 set_use_underline: true,
-                set_subtitle: "Only delete tags if sidecar file exists",
+                set_subtitle: "仅当附带文件存在时删除标签",
                 set_model: Some(&gtk::StringList::new(&[
                   "Unconditional",
-                  "No Sidecar",
-                  "Plain Sidecar",
-                  "Sync Sidecar",
-                  "Any Sidecar",
+                  "无附带文件",
+                  "纯文本附带文件",
+                  "同步附带文件",
+                  "任意附带文件",
                 ])),
                 #[watch]
                 set_sensitive: model.state.tags.delete != ManageLyricsTarget::None,
@@ -107,14 +107,14 @@ impl Component for ManageLyricsModel {
               },
 
               adw::ComboRow {
-                set_title: "_Copy From Sidecar Files",
+                set_title: "_从附带文件复制",
                 set_use_underline: true,
-                set_subtitle: "Copy to lyrics tags from LRC/TXT files saved alongside",
+                set_subtitle: "从旁边的 LRC/TXT 文件复制到歌词标签",
                 set_model: Some(&gtk::StringList::new(&[
-                  "Do Nothing",
-                  "Copy Plain",
-                  "Copy Sync",
-                  "Copy Any",
+                  "不执行操作",
+                  "复制纯文本",
+                  "复制同步",
+                  "复制任意",
                 ])),
                 #[watch]
                 set_sensitive: model.state.tags.delete == ManageLyricsTarget::None,
@@ -128,11 +128,11 @@ impl Component for ManageLyricsModel {
               },
 
               adw::SwitchRow {
-                set_title: "Con_vert Sync to Plain Lyrics",
+                set_title: "将同步歌词_转换为纯文本",
                 set_use_underline: true,
                 #[watch]
                 set_sensitive: model.state.tags.delete == ManageLyricsTarget::None,
-                set_subtitle: "Convert synchronous LRC lyrics tags to plain TXT lyrics",
+                set_subtitle: "将同步 LRC 歌词标签转换为纯 TXT 歌词",
                 #[watch]
                 set_active: model.state.tags.convert_to_plain && model.state.tags.delete == ManageLyricsTarget::None,
                 connect_active_notify[sender] => move |btn| {
@@ -143,21 +143,21 @@ impl Component for ManageLyricsModel {
           },
 
           adw::PreferencesGroup {
-            set_title: "Sidecar Files",
-            set_description: Some("What actions to take on LRC/TXT lyrics files."),
+            set_title: "附带文件",
+            set_description: Some("对 LRC/TXT 歌词文件执行的操作。"),
 
             gtk::ListBox {
               add_css_class: "boxed-list",
 
               adw::ComboRow {
-                set_title: "Delete _Sidecar Files",
+                set_title: "删除_附带文件",
                 set_use_underline: true,
-                set_subtitle: "Delete synchronous LRC or plain TXT sidecar lyrics files",
+                set_subtitle: "删除同步 LRC 或纯文本 TXT 附带歌词文件",
                 set_model: Some(&gtk::StringList::new(&[
-                  "Do Nothing",
-                  "Delete Plain",
-                  "Delete Sync",
-                  "Delete All",
+                  "不执行操作",
+                  "删除纯文本",
+                  "删除同步",
+                  "删除全部",
                 ])),
                 #[watch]
                 set_selected: model.state.sidecars.delete as u32,
@@ -169,15 +169,15 @@ impl Component for ManageLyricsModel {
               },
 
               adw::ComboRow {
-                set_title: "Co_nditional Delete",
+                set_title: "_条件删除",
                 set_use_underline: true,
-                set_subtitle: "Only delete sidecar files if tag exists",
+                set_subtitle: "仅当标签存在时删除附带文件",
                 set_model: Some(&gtk::StringList::new(&[
                   "Unconditional",
-                  "No Tag",
-                  "Plain Tag",
-                  "Sync Tag",
-                  "Any Tag",
+                  "无标签",
+                  "纯文本标签",
+                  "同步标签",
+                  "任意标签",
                 ])),
                 #[watch]
                 set_sensitive: model.state.sidecars.delete != ManageLyricsTarget::None,
@@ -196,14 +196,14 @@ impl Component for ManageLyricsModel {
               },
 
               adw::ComboRow {
-                set_title: "Copy From _Lyrics Tags",
+                set_title: "从_歌词标签复制",
                 set_use_underline: true,
-                set_subtitle: "Copy to LRC/TXT files from lyrics tags",
+                set_subtitle: "从歌词标签复制到 LRC/TXT 文件",
                 set_model: Some(&gtk::StringList::new(&[
-                  "Do Nothing",
-                  "Copy Plain",
-                  "Copy Sync",
-                  "Copy Any",
+                  "不执行操作",
+                  "复制纯文本",
+                  "复制同步",
+                  "复制任意",
                 ])),
                 #[watch]
                 set_sensitive: model.state.sidecars.delete == ManageLyricsTarget::None,
@@ -217,9 +217,9 @@ impl Component for ManageLyricsModel {
               },
 
               adw::SwitchRow {
-                set_title: "Conver_t Sync to Plain Lyrics",
+                set_title: "将同步歌词转换为_纯文本",
                 set_use_underline: true,
-                set_subtitle: "Convert synchronous LRC lyrics files to plain TXT lyrics",
+                set_subtitle: "将同步 LRC 歌词文件转换为纯 TXT 歌词",
                 #[watch]
                 set_sensitive: model.state.sidecars.delete == ManageLyricsTarget::None,
                 #[watch]
@@ -238,7 +238,7 @@ impl Component for ManageLyricsModel {
               set_spacing: 12,
 
               gtk::Button {
-                set_label: "Cancel",
+                set_label: "取消",
 
                 connect_clicked[sender] => move |_btn| {
                   sender.output(ManageLyricsOutput::Close)
@@ -247,7 +247,7 @@ impl Component for ManageLyricsModel {
               },
 
               gtk::Button {
-                set_label: "Apply",
+                set_label: "应用",
                 #[watch]
                 set_sensitive: model.state != model.default_state,
                 add_css_class: "suggested-action",
@@ -269,12 +269,12 @@ impl Component for ManageLyricsModel {
     sender: ComponentSender<Self>,
   ) -> ComponentParts<Self> {
     let alert_dialog = adw::AlertDialog::builder()
-      .heading("Are you sure?")
-      .body("This action cannot be undone.")
+      .heading("确定吗？")
+      .body("此操作无法撤销。")
       .default_response("cancel")
       .close_response("cancel")
       .build();
-    alert_dialog.add_response("cancel", "Cancel");
+    alert_dialog.add_response("cancel", "取消");
     alert_dialog.add_response("confirm", "Confirm");
     alert_dialog.set_response_appearance("confirm", adw::ResponseAppearance::Destructive);
 

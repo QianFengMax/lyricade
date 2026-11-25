@@ -58,7 +58,7 @@ pub fn ndt_utc_to_humanised_string(ndt_utc: NaiveDateTime) -> String {
     // Clean up `chrono-humanize` output
     // TODO: Consider a different crate
     if &s == "now ago" {
-      "Just now".into()
+      "刚刚".into()
     } else {
       s
     }

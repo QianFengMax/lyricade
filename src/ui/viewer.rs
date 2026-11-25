@@ -81,7 +81,7 @@ impl SimpleComponent for ViewLyricsModel {
         glib::Propagation::Proceed
       },
 
-      set_title: Some("Lyrics"),
+      set_title: Some("歌词"),
       set_default_size: (600, 700),
 
       #[wrap(Some)]
@@ -90,7 +90,7 @@ impl SimpleComponent for ViewLyricsModel {
           pack_end = &gtk::ToggleButton {
             set_icon_name: "format-text-plaintext-symbolic",
             add_css_class: "flat",
-            set_tooltip: "Plain Text View",
+            set_tooltip: "纯文本视图",
             #[watch]
             set_active: model.is_viewing_raw,
 
@@ -102,7 +102,7 @@ impl SimpleComponent for ViewLyricsModel {
           pack_end = &gtk::ToggleButton {
             set_icon_name: "media-playback-start-symbolic",
             add_css_class: "flat",
-            set_tooltip: "Follow Current Lyric",
+            set_tooltip: "跟随当前歌词",
             #[watch]
             set_visible: model.lyrics_sync && !model.is_viewing_raw,
             #[watch]
@@ -116,7 +116,7 @@ impl SimpleComponent for ViewLyricsModel {
           pack_end = &gtk::ToggleButton {
             set_icon_name: "marker-symbolic",
             add_css_class: "flat",
-            set_tooltip: "Highlight Current Lyric",
+            set_tooltip: "高亮当前歌词",
             #[watch]
             set_visible: model.lyrics_sync && !model.is_viewing_raw,
             #[watch]
@@ -213,7 +213,7 @@ impl SimpleComponent for ViewLyricsModel {
             },
           } -> {
             // returned `ViewStackPage`
-            set_title: Some("Stylised"),
+            set_title: Some("美化"),
             set_name: Some("stylised"),
             set_icon_name: Some("magic-wand-symbolic"),
           },
@@ -233,7 +233,7 @@ impl SimpleComponent for ViewLyricsModel {
             }
           } -> {
             // returned `ViewStackPage`
-            set_title: Some("Raw"),
+            set_title: Some("原始"),
             set_name: Some("raw"),
             set_icon_name: Some("format-text-rich-symbolic"),
           },
@@ -258,15 +258,15 @@ impl SimpleComponent for ViewLyricsModel {
       ViewLyricsSource::Tag => track
         .lyrics
         .clone()
-        .unwrap_or_else(|| "No lyrics tag found".into()),
+        .unwrap_or_else(|| "未找到歌词标签".into()),
       ViewLyricsSource::Lrc => track
         .lyrics_sidecar_lrc_file
         .clone()
-        .unwrap_or_else(|| "No LRC sidecar file found".into()),
+        .unwrap_or_else(|| "未找到 LRC 附带文件".into()),
       ViewLyricsSource::Txt => track
         .lyrics_sidecar_txt_file
         .clone()
-        .unwrap_or_else(|| "No TXT sidecar file found".into()),
+        .unwrap_or_else(|| "未找到 TXT 附带文件".into()),
     };
 
     // Build the factory components

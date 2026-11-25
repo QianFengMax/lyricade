@@ -122,7 +122,7 @@ impl SimpleComponent for PrefsModel {
 
   view! {
     prefs_window = adw::PreferencesDialog {
-      set_title: "Preferences",
+      set_title: "首选项",
 
       // Update and save settings on close
       connect_closed[sender] => move |_| {
@@ -130,20 +130,20 @@ impl SimpleComponent for PrefsModel {
       },
 
       add = &adw::PreferencesPage {
-        set_title: "_General",
+        set_title: "_常规",
         set_use_underline: true,
         set_icon_name: Some("preferences-system-symbolic"),
 
         adw::PreferencesGroup {
-          set_title: "Lyrics Format",
+          set_title: "歌词格式",
 
           gtk::ListBox {
             add_css_class: "boxed-list",
 
             adw::ActionRow {
-              set_title: "_Synchronous",
+              set_title: "_同步",
               set_use_underline: true,
-              set_subtitle: "Prefer LRC format lyrics",
+              set_subtitle: "优先使用 LRC 格式歌词",
               set_selectable: false,
 
               set_activatable_widget: Some(&group_lyrics_type_button_sync),
@@ -160,9 +160,9 @@ impl SimpleComponent for PrefsModel {
             },
 
             adw::ActionRow {
-              set_title: "_Plain",
+              set_title: "_纯文本",
               set_use_underline: true,
-              set_subtitle: "Prefer plain text lyrics",
+              set_subtitle: "优先使用纯文本歌词",
               set_selectable: false,
 
               set_activatable_widget: Some(&group_lyrics_type_button_plain),
@@ -182,12 +182,12 @@ impl SimpleComponent for PrefsModel {
         },
 
         adw::PreferencesGroup {
-          set_title: "Saving Lyrics",
+          set_title: "保存歌词",
 
           adw::SwitchRow {
-            set_title: "Update Lyrics _Tags",
+            set_title: "更新歌词_标签",
             set_use_underline: true,
-            set_subtitle: "Update audio file metadata",
+            set_subtitle: "更新音频文件元数据",
             #[watch]
             set_active: model.settings_current.update_lyrics_tag_on_fetch,
             connect_active_notify[sender] => move |btn| {
@@ -196,9 +196,9 @@ impl SimpleComponent for PrefsModel {
           },
 
           adw::SwitchRow {
-            set_title: "Save Sidecar _Files",
+            set_title: "保存附带_文件",
             set_use_underline: true,
-            set_subtitle: "Save .lrc or .txt lyrics files alongside audio files",
+            set_subtitle: "在音频文件旁保存 .lrc 或 .txt 歌词文件",
             #[watch]
             set_active: model.settings_current.save_sidecar_file_on_fetch,
             connect_active_notify[sender] => move |btn| {
@@ -208,15 +208,15 @@ impl SimpleComponent for PrefsModel {
         },
 
         adw::PreferencesGroup {
-          set_title: "Lyrics Providers",
-          set_description: Some("<b>Primary Providers</b> are guaranteed to be tried, unless the requested lyrics type has already been found. <b>Fallback Providers</b> are tried only if Primary Providers are rate-limited or otherwise busy. Having more than one Primary Providers can slow down the fetching process for large libraries."),
+          set_title: "歌词提供者",
+          set_description: Some("<b>主要提供者</b>一定会被尝试（除非已找到所需歌词类型）。<b>备用提供者</b>仅在主要提供者限流或繁忙时尝试。设置多个主要提供者会拖慢大音乐库的获取速度。"),
 
           gtk::Box {
             set_homogeneous: true,
             set_spacing: 12,
 
             adw::PreferencesGroup {
-              set_title: "Primary Providers",
+              set_title: "主要提供者",
 
               #[local_ref]
               primary_providers_list_box -> gtk::ListBox {
@@ -225,7 +225,7 @@ impl SimpleComponent for PrefsModel {
             },
 
             adw::PreferencesGroup {
-              set_title: "Fallback Providers",
+              set_title: "备用提供者",
 
               #[local_ref]
               secondary_providers_list_box -> gtk::ListBox {
@@ -236,12 +236,12 @@ impl SimpleComponent for PrefsModel {
         },
 
         adw::PreferencesGroup {
-          set_title: "Library Scan",
+          set_title: "音乐库扫描",
 
           adw::SwitchRow {
-            set_title: "Ignore _Unchanged",
+            set_title: "忽略_未更改",
             set_use_underline: true,
-            set_subtitle: "Only scan added or modified files when refreshing tracks",
+            set_subtitle: "刷新轨道时仅扫描新增或修改过的文件",
             #[watch]
             set_active: model.settings_current.scan_new_files_only,
             connect_active_notify[sender] => move |btn| {
@@ -251,13 +251,13 @@ impl SimpleComponent for PrefsModel {
         },
 
         adw::PreferencesGroup {
-          set_title: "Appearance",
+          set_title: "外观",
 
           adw::ComboRow {
-            set_title: "C_olour Scheme",
+            set_title: "_配色方案",
             set_use_underline: true,
             set_model: Some(&gtk::StringList::new(&[
-              "Follow System",
+              "跟随系统",
               "Light",
               "Dark",
             ])),
@@ -279,7 +279,7 @@ impl SimpleComponent for PrefsModel {
           },
 
           adw::SwitchRow {
-            set_title: "_Column Separators",
+            set_title: "_列分隔符",
             set_use_underline: true,
             #[watch]
             set_active: model.settings_current.tracks_table_col_separators,
@@ -289,7 +289,7 @@ impl SimpleComponent for PrefsModel {
           },
 
           adw::SwitchRow {
-            set_title: "_Row Separators",
+            set_title: "_行分隔符",
             set_use_underline: true,
             #[watch]
             set_active: model.settings_current.tracks_table_row_separators,
@@ -300,15 +300,15 @@ impl SimpleComponent for PrefsModel {
         },
 
         adw::PreferencesGroup {
-          set_title: "Date and Time Format",
+          set_title: "日期和时间格式",
 
           gtk::ListBox {
             add_css_class: "boxed-list",
 
             adw::ActionRow {
-              set_title: "Simpl_e",
+              set_title: "_简洁",
               set_use_underline: true,
-              set_subtitle: &format!("Examples: “{}”, “{}”", example_datetime_simple1, example_datetime_simple2),
+              set_subtitle: &format!("示例：“{}”、“{}”", example_datetime_simple1, example_datetime_simple2),
               set_selectable: false,
 
               set_activatable_widget: Some(&group_datetime_format_button_simple),
@@ -323,9 +323,9 @@ impl SimpleComponent for PrefsModel {
             },
 
             adw::ActionRow {
-              set_title: "_Accurate",
+              set_title: "_精确",
               set_use_underline: true,
-              set_subtitle: &format!("Examples: “{}”, “{}”", example_datetime_accurate1, example_datetime_accurate2),
+              set_subtitle: &format!("示例：“{}”、“{}”", example_datetime_accurate1, example_datetime_accurate2),
               set_selectable: false,
 
               set_activatable_widget: Some(&group_datetime_format_button_accurate),
@@ -343,11 +343,11 @@ impl SimpleComponent for PrefsModel {
         },
 
         adw::PreferencesGroup {
-          set_title: "Miscellaneous",
+          set_title: "杂项",
 
           adw::SwitchRow {
-            set_title: "Restore _Hidden Alerts",
-            set_subtitle: "Restore dialogs hidden by clicking “Don't ask again”",
+            set_title: "恢复_隐藏的提示",
+            set_subtitle: "恢复因点击“不再询问”而隐藏的对话框",
             #[watch]
             set_active: model.restore_hidden_alerts,
             #[watch]
@@ -361,12 +361,12 @@ impl SimpleComponent for PrefsModel {
           adw::ExpanderRow {
             set_focusable: false,
             set_selectable: false,
-            set_title: "Advanced Settings",
+            set_title: "高级设置",
 
             add_row = &adw::SwitchRow {
-              set_title: "Plain Lyrics in ID3v_2 USLT Frame (MP3)",
+              set_title: "在 ID3v_2 USLT 帧中保存纯文本歌词 (MP3)",
               set_use_underline: true,
-              set_subtitle: "Synchronous lyrics will be encoded in the SYLT synchronised text frame per the ID3v2 V3 spec, but a copy will also be inserted in the USLT unsynchronised text frame. Choose whether this copy is converted to plain text format or LRC sync format is retained. <b>It is recommended to keep this option disabled to increase player compatibility.</b>",
+              set_subtitle: "同步歌词会按 ID3v2 V3 规范编码到 SYLT 同步文本帧，但也会在 USLT 非同步文本帧中插入副本。可选择该副本是转换为纯文本格式还是保留 LRC 同步格式。<b>建议保持此选项关闭以提高播放器兼容性。</b>",
               #[watch]
               set_active: model.settings_current.plain_lyrics_in_id3v2_uslt_frame,
               connect_active_notify[sender] => move |btn| {
@@ -383,7 +383,7 @@ impl SimpleComponent for PrefsModel {
             set_spacing: 12,
 
               gtk::Button {
-                set_label: "Re_vert Changes",
+                set_label: "_还原更改",
                 set_use_underline: true,
                 #[watch]
                 set_sensitive: model.settings_current != model.settings_initial
@@ -391,7 +391,7 @@ impl SimpleComponent for PrefsModel {
                 connect_clicked => PrefsMsg::RevertSettings,
               },
               gtk::Button {
-                set_label: "Use _Defaults",
+                set_label: "使用_默认值",
                 set_use_underline: true,
                 connect_clicked => PrefsMsg::DefaultSettings,
               },
@@ -402,14 +402,14 @@ impl SimpleComponent for PrefsModel {
       add = &adw::PreferencesPage {
         set_name: Some("libraries"),
         #[watch]
-        set_title: &format!("_Music Libraries ({})", model.libraries.len()),
+        set_title: &format!("_音乐库 ({})", model.libraries.len()),
         set_use_underline: true,
         set_visible: true,
         set_icon_name: Some("folder-music-symbolic"),
 
         adw::PreferencesGroup {
-          set_title: "Music Libraries",
-          set_description: Some("Add, remove or edit Music Libraries. A Music Library is a path to search for audio files."),
+          set_title: "音乐库",
+          set_description: Some("添加、移除或编辑音乐库。音乐库即搜索音频文件的路径。"),
 
           #[local_ref]
           libraries_list_box -> gtk::ListBox {
@@ -436,7 +436,7 @@ impl SimpleComponent for PrefsModel {
                   set_icon_name: Some("list-add-symbolic"),
                 },
                 gtk::Label {
-                  set_label: "_Add Music Library",
+                  set_label: "_添加音乐库",
                   set_use_underline: true,
                   add_css_class: "title",
                 }
@@ -479,7 +479,7 @@ impl SimpleComponent for PrefsModel {
     // Create file dialogs
     let file_dialog_settings = OpenDialogSettings {
       folder_mode: true,
-      accept_label: "Use Folder".into(),
+      accept_label: "使用文件夹".into(),
       create_folders: false,
       is_modal: true,
       ..Default::default()
@@ -522,7 +522,7 @@ impl SimpleComponent for PrefsModel {
     let secondary_providers_list_box = model.secondary_provider_rows.widget();
 
     let provider_placeholder_row = adw::ActionRow::default();
-    provider_placeholder_row.set_title("Empty");
+    provider_placeholder_row.set_title("空");
     provider_placeholder_row.inline_css("font-style: italic;");
     provider_placeholder_row.add_css_class("dimmed");
     provider_placeholder_row.set_halign(gtk::Align::Center);
@@ -867,7 +867,7 @@ impl SimpleComponent for PrefsModel {
           && target_tier == ProviderTier::Secondary
           && source.iter().filter(|pr| pr.state.enabled).count() == 1
         {
-          sender.input(PrefsMsg::ShowToast(String::from("Must have a Primary Provider"), true));
+          sender.input(PrefsMsg::ShowToast(String::from("必须有一个主要提供者"), true));
           return;
         }
 
@@ -963,7 +963,7 @@ impl SimpleComponent for PrefsModel {
           && source.iter().filter(|pr| pr.state.enabled).count() == 1
         {
           sender.input(PrefsMsg::ShowToast(
-            String::from("Must have at least one Primary Provider"),
+            String::from("必须至少有一个主要提供者"),
             true,
           ));
           return;

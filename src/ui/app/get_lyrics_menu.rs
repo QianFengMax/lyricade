@@ -145,8 +145,8 @@ impl SimpleComponent for GetLyricsButtonModel {
     menu_action_group.add_action(action_set_type);
 
     let menu_lyrics_type_section = gtk::gio::Menu::new();
-    menu_lyrics_type_section.append(Some("_No Lyrics"), Some("get_lyrics.lyrics_type::NoLyrics"));
-    menu_lyrics_type_section.append(Some("Not _Sync"), Some("get_lyrics.lyrics_type::NotSync"));
+    menu_lyrics_type_section.append(Some("_无歌词"), Some("get_lyrics.lyrics_type::NoLyrics"));
+    menu_lyrics_type_section.append(Some("非_同步"), Some("get_lyrics.lyrics_type::NotSync"));
 
     // Last checked options
     let sender_handle = sender.clone();
@@ -181,12 +181,12 @@ impl SimpleComponent for GetLyricsButtonModel {
     menu_action_group.add_action(action_set_last_checked);
 
     let menu_time_section = gtk::gio::Menu::new();
-    menu_time_section.append(Some("Ne_ver"), Some("get_lyrics.last_checked::Never"));
-    menu_time_section.append(Some("> _1 Month"), Some("get_lyrics.last_checked::Months(1)"));
-    menu_time_section.append(Some("> _3 Months"), Some("get_lyrics.last_checked::Months(3)"));
-    menu_time_section.append(Some("> _6 Months"), Some("get_lyrics.last_checked::Months(6)"));
-    menu_time_section.append(Some("> 1 _Year"), Some("get_lyrics.last_checked::Year"));
-    menu_time_section.append(Some("_Any"), Some("get_lyrics.last_checked::Any"));
+    menu_time_section.append(Some("从_不"), Some("get_lyrics.last_checked::Never"));
+    menu_time_section.append(Some("> _1 个月"), Some("get_lyrics.last_checked::Months(1)"));
+    menu_time_section.append(Some("> _3 个月"), Some("get_lyrics.last_checked::Months(3)"));
+    menu_time_section.append(Some("> _6 个月"), Some("get_lyrics.last_checked::Months(6)"));
+    menu_time_section.append(Some("> 1 _年"), Some("get_lyrics.last_checked::Year"));
+    menu_time_section.append(Some("_任意"), Some("get_lyrics.last_checked::Any"));
 
     // Visible option
     let sender_handle = sender.clone();
@@ -208,13 +208,13 @@ impl SimpleComponent for GetLyricsButtonModel {
     menu_action_group.add_action(action_set_target_selected.clone());
 
     let menu_target_section = gtk::gio::Menu::new();
-    menu_target_section.append(Some("_Visible"), Some("get_lyrics.visible"));
-    menu_target_section.append(Some("_Selected"), Some("get_lyrics.selected"));
+    menu_target_section.append(Some("_可见"), Some("get_lyrics.visible"));
+    menu_target_section.append(Some("_已选中"), Some("get_lyrics.selected"));
 
     let menu = gtk::gio::Menu::new();
-    menu.append_section(Some("Lyrics"), &menu_lyrics_type_section);
-    menu.append_section(Some("Last Checked"), &menu_time_section);
-    menu.append_section(Some("Limit To"), &menu_target_section);
+    menu.append_section(Some("歌词"), &menu_lyrics_type_section);
+    menu.append_section(Some("上次检查"), &menu_time_section);
+    menu.append_section(Some("限制为"), &menu_target_section);
 
     menu_action_group.register_for_widget(&root);
 

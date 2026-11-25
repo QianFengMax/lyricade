@@ -123,7 +123,7 @@ impl Component for ProgressModalModel {
       .extra_child(&root)
       .default_response("cancel")
       .build();
-    alert_dialog.add_response("cancel", "_Cancel");
+    alert_dialog.add_response("cancel", "_取消");
 
     let closing_programmatically = Rc::new(Cell::new(false));
     let showing = Rc::new(Cell::new(false));

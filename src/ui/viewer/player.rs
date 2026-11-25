@@ -103,7 +103,7 @@ impl SimpleComponent for PlayerModel {
           gtk::Button {
             inline_css: "border-radius: 1000px;",
             set_icon_name: "media-skip-backward-symbolic",
-            set_tooltip: "Skip to Start",
+            set_tooltip: "跳到开头",
 
             connect_clicked[sender] => move |_btn| {
               sender.input(PlayerMsg::Seek(0.0));
@@ -124,8 +124,8 @@ impl SimpleComponent for PlayerModel {
               else { "media-playback-start-symbolic"},
             #[watch]
             set_tooltip: if  model.state== PlayerState::Playing
-              { "Pause" }
-              else { "Play"},
+              { "暂停" }
+              else { "播放"},
 
             connect_clicked[sender] => move |_btn| {
               sender.input(PlayerMsg::TogglePlay);
@@ -195,7 +195,7 @@ impl SimpleComponent for PlayerModel {
           set_margin_end: 24,
 
           gtk::MenuButton {
-            set_tooltip: "Volume",
+            set_tooltip: "音量",
             add_css_class: "flat",
             set_direction: gtk::ArrowType::Up,
             #[watch]

@@ -42,7 +42,7 @@ impl FactoryComponent for ProviderStateRow {
           add_css_class: "heading",
           set_ellipsize: gtk::pango::EllipsizeMode::End,
           set_text: &self.state.id.to_string(),
-          set_tooltip: &format!("Lyrics Provider: {}", self.state.id),
+          set_tooltip: &format!("歌词提供者: {}", self.state.id),
         },
       },
 
@@ -66,7 +66,7 @@ impl FactoryComponent for ProviderStateRow {
               set_width_chars: 3,
               #[watch]
               set_text: &self.state.current_requests.load(Ordering::Relaxed).to_formatted_string(&*NUM_LOCALE),
-              set_tooltip: "Current Requests",
+              set_tooltip: "当前请求",
             },
           },
         },
@@ -84,7 +84,7 @@ impl FactoryComponent for ProviderStateRow {
               add_css_class: "title",
               #[watch]
               set_text: &self.state.total_requests.load(Ordering::Relaxed).to_formatted_string(&*NUM_LOCALE),
-              set_tooltip: "Total Requests",
+              set_tooltip: "总请求",
             },
           },
         },
@@ -105,7 +105,7 @@ impl FactoryComponent for ProviderStateRow {
               #[watch]
               set_class_active: ("destructive-icon", self.state.failing.load(Ordering::Relaxed)),
               #[watch]
-              set_tooltip: if self.state.failing.load(Ordering::Relaxed) { "Failing" } else { "Rate-Limited" },
+              set_tooltip: if self.state.failing.load(Ordering::Relaxed) { "失败" } else { "速率受限" },
             },
           },
         },

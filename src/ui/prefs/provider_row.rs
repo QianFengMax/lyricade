@@ -100,21 +100,21 @@ impl FactoryComponent for ProviderRow {
     });
 
     let menu = gtk::gio::Menu::new();
-    menu.append(Some("Move _Up"), Some("provider_row_menu.move_up"));
-    menu.append(Some("Move _Down"), Some("provider_row_menu.move_down"));
+    menu.append(Some("_上移"), Some("provider_row_menu.move_up"));
+    menu.append(Some("_下移"), Some("provider_row_menu.move_down"));
 
     let section = gtk::gio::Menu::new();
     let swap_text = if state.secondary {
-      "Move to _Primary"
+      "移至_主要"
     } else {
-      "Move to _Fallback"
+      "移至_备用"
     };
     section.append(Some(swap_text), Some("provider_row_menu.swap_tier"));
     menu.append_section(None, &section);
 
     let section = gtk::gio::Menu::new();
     section.append(
-      Some(if state.enabled { "Disabl_e" } else { "_Enable" }),
+      Some(if state.enabled { "_禁用" } else { "_启用" }),
       Some("provider_row_menu.toggle"),
     );
     menu.append_section(None, &section);
@@ -210,10 +210,10 @@ impl FactoryComponent for ProviderRow {
         section.append(
           Some(if self.state.enabled {
             widgets.row_widget.remove_css_class("dimmed");
-            "Disable"
+            "禁用"
           } else {
             widgets.row_widget.add_css_class("dimmed");
-            "Enable"
+            "启用"
           }),
           Some("provider_row_menu.toggle"),
         );

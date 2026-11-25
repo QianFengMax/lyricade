@@ -95,7 +95,7 @@ impl SimpleComponent for TracksTableModel {
       },
 
       add_overlay = &adw::StatusPage {
-        set_description: Some("No results"),
+        set_description: Some("无结果"),
         set_icon_name: Some("edit-find-symbolic"),
         add_css_class: "compact",
         #[watch]
@@ -617,8 +617,8 @@ impl RelmColumn for TracksTableColumnTrack {
     let inst_tag = gtk::Label::new(None);
     inst_tag.add_css_class("caption");
     inst_tag.inline_css("padding: 0 0.5em; background: @sidebar_bg_color; border-radius: 6px");
-    inst_tag.set_label("INST");
-    inst_tag.set_tooltip("Instrumental Track");
+    inst_tag.set_label("纯音乐");
+    inst_tag.set_tooltip("纯音乐轨道");
     inst_tag.set_visible(false);
 
     bx.append(&label);
@@ -685,15 +685,15 @@ impl RelmColumn for TracksTableColumnLyricsTag {
       id.replace(Some(item.id));
 
       if item.lyrics_synchronised {
-        label.set_label("Sync");
-        root.set_tooltip("Sync Lyrics Tag");
+        label.set_label("同步");
+        root.set_tooltip("同步歌词标签");
         icon.set_icon_name(Some("audio-x-generic-symbolic"));
         if PREFER_SYNC_LYRICS.load(Ordering::Relaxed) {
           root.add_css_class("preferred");
         }
       } else {
-        label.set_label("Plain");
-        root.set_tooltip("Plain Lyrics Tag");
+        label.set_label("纯文本");
+        root.set_tooltip("纯文本歌词标签");
         icon.set_icon_name(Some("audio-x-generic-symbolic"));
         if !PREFER_SYNC_LYRICS.load(Ordering::Relaxed) {
           root.add_css_class("preferred");
@@ -776,29 +776,29 @@ impl RelmColumn for TracksTableColumnSidecar {
 
     if item.lyrics_sidecar_lrc_file.is_some() && item.lyrics_sidecar_txt_file.is_some() {
       if PREFER_SYNC_LYRICS.load(Ordering::Relaxed) {
-        label.set_label("Sync+");
-        root.set_tooltip("Multiple Sidecar Files");
+        label.set_label("同步+");
+        root.set_tooltip("多个附带文件");
         root.add_css_class("preferred");
         icon.set_icon_name(Some("text-x-generic-symbolic"));
         src.replace(Some(ViewLyricsSource::Lrc));
       } else {
-        label.set_label("Plain+");
-        root.set_tooltip("Multiple Sidecar Files");
+        label.set_label("纯文本+");
+        root.set_tooltip("多个附带文件");
         root.add_css_class("preferred");
         icon.set_icon_name(Some("text-x-generic-symbolic"));
         src.replace(Some(ViewLyricsSource::Txt));
       }
     } else if item.lyrics_sidecar_lrc_file.is_some() {
-      label.set_label("Sync");
-      root.set_tooltip("Sync Sidecar File");
+      label.set_label("同步");
+      root.set_tooltip("同步附带文件");
       icon.set_icon_name(Some("text-x-generic-symbolic"));
       if PREFER_SYNC_LYRICS.load(Ordering::Relaxed) {
         root.add_css_class("preferred");
       }
       src.replace(Some(ViewLyricsSource::Lrc));
     } else if item.lyrics_sidecar_txt_file.is_some() {
-      label.set_label("Plain");
-      root.set_tooltip("Plain Sidecar File");
+      label.set_label("纯文本");
+      root.set_tooltip("纯文本附带文件");
       icon.set_icon_name(Some("text-x-generic-symbolic"));
       if !PREFER_SYNC_LYRICS.load(Ordering::Relaxed) {
         root.add_css_class("preferred");
@@ -877,7 +877,7 @@ impl RelmColumn for TracksTableColumnCheckedSimpleFormat {
 
   fn bind(item: &mut Self::Item, _widgets: &mut Self::Widgets, root: &mut Self::Root) {
     let (label, tooltip) = item.last_api_check_at.map_or_else(
-      || (String::from("Never"), String::from("Never Checked for Lyrics")),
+      || (String::from("Never"), String::from("从未检查歌词")),
       |ndt| {
         let iso = util::ndt_utc_to_ui_string(ndt);
         let label = util::ndt_utc_to_humanised_string(ndt);
@@ -943,7 +943,7 @@ impl RelmColumn for TracksTableColumnCheckedAccurateFormat {
 
   fn bind(item: &mut Self::Item, _widgets: &mut Self::Widgets, root: &mut Self::Root) {
     let (label, tooltip) = item.last_api_check_at.map_or_else(
-      || (String::from("Never"), Some(String::from("Never Checked for Lyrics"))),
+      || (String::from("Never"), Some(String::from("从未检查歌词"))),
       |ndt| {
         let iso = util::ndt_utc_to_ui_string(ndt);
         (iso, None)
