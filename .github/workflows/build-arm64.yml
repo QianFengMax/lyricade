@@ -1,49 +1,139 @@
-name: Build Lyricade (linux/arm64)
+name: Build Lyricade (linux/arm64, 简中汉化)
 
+# 触发方式：
+#   1) 每 6 小时检查上游 weiteck/lyricade，有新提交则自动同步 -> 汉化 -> 编译
+#   2) 手动触发（workflow_dispatch）
+#   3) 推送到本仓库 main 分支
 on:
+  schedule:
+    - cron: "0 */6 * * *"
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "**.md"
 
 permissions:
-  contents: read
+  contents: write
+
+concurrency:
+  group: build-arm64-zh
+  cancel-in-progress: false
+
+env:
+  UPSTREAM: weiteck/lyricade
+  UPSTREAM_BRANCH: main
 
 jobs:
-  build:
-    name: Build Lyricade aarch64
+  sync-upstream:
+    name: 同步上游并汉化
     runs-on: ubuntu-26.04-arm
-
+    if: github.actor != 'github-actions[bot]'
+    outputs:
+      changed: ${{ steps.up.outputs.changed }}
+      sha: ${{ steps.up.outputs.sha }}
     steps:
-      - name: Checkout Source Code
+      - name: 检出本仓库
         uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install System Dependencies
+      - name: 检查上游最新提交
+        id: up
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          SHA=$(gh api "repos/$UPSTREAM/commits/$UPSTREAM_BRANCH" --jq .sha)
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+          echo "上游最新提交: $SHA"
+          CURRENT=$(cat .upstream-sha 2>/dev/null || echo none)
+          echo "已同步记录: $CURRENT"
+          if [ "$SHA" = "$CURRENT" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "上游无新提交，跳过同步。"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "检测到上游更新。"
+          fi
+
+      - name: 获取上游源码并覆盖工作区
+        if: steps.up.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          git remote add upstream "https://github.com/$UPSTREAM.git" 2>/dev/null || true
+          git fetch --depth=1 upstream "${{ steps.up.outputs.sha }}"
+          # 清空索引中除 scripts/ 与 .github/ 之外的条目，再整体覆盖上游，
+          # 这样上游删除的文件也会一并消失，不会残留陈旧文件。
+          git ls-files -z | grep -zvE '^(scripts|\.github)/' \
+            | xargs -0 -r git rm -q --cached --ignore-unmatch || true
+          git checkout FETCH_HEAD -- . ':(exclude)scripts' ':(exclude).github'
+          echo "上游源码已覆盖到工作区"
+
+      - name: 应用简体中文汉化
+        if: steps.up.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/localize.py
+          echo "${{ steps.up.outputs.sha }}" > .upstream-sha
+
+      - name: 提交并推送
+        if: steps.up.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "无改动可提交"
+            exit 0
+          fi
+          git commit -m "同步上游 $UPSTREAM@${{ steps.up.outputs.sha }} 并应用简体中文汉化"
+          git push origin main
+
+  build:
+    name: 编译 aarch64
+    needs: sync-upstream
+    if: |
+      needs.sync-upstream.outputs.changed == 'true'
+      || (github.event_name != 'schedule' && github.actor != 'github-actions[bot]')
+    runs-on: ubuntu-26.04-arm
+    steps:
+      - name: 检出源码
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: 安装构建依赖
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-            pkg-config \
-            libglib2.0-dev \
-            libgtk-4-dev \
-            libadwaita-1-dev \
-            build-essential \
-            libasound2-dev \
-            pipewire-alsa \
-            libpipewire-0.3-dev \
-            libpulse-dev
+          sudo apt-get install -y --no-install-recommends \
+            pkg-config libglib2.0-dev libgtk-4-dev libadwaita-1-dev \
+            build-essential libasound2-dev pipewire-alsa \
+            libpipewire-0.3-dev libpulse-dev
 
-      - name: Setup Rust Toolchain
+      - name: 安装 Rust 工具链
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Rust Cache
+      - name: 缓存 cargo 依赖
         uses: swatinem/rust-cache@v2
 
-      - name: Build Binary
+      - name: 编译
         run: cargo build --release
 
-      - name: Verify architecture
+      - name: 校验产物与汉化
         run: |
+          set -euo pipefail
           file target/release/lyricade
           test -x target/release/lyricade
+          for s in 搜索 获取歌词 音乐库 首选项 管理歌词 轨道详情 纯音乐; do
+            grep -qa "$s" target/release/lyricade || { echo "缺少中文串: $s"; exit 1; }
+          done
+          echo "汉化校验通过"
 
-      - name: Upload Binary
+      - name: 上传产物
         uses: actions/upload-artifact@v4
         with:
           name: lyricade-aarch64
